@@ -1,0 +1,22 @@
+This are;
+Description	Resource	Path	Location	Type
+expected declaration specifiers or '...' before '-' token	lv_bar.h	/stm32f746_disco_no_os/lvgl/src/lv_objx	line 41	C/C++ Problem
+expected declaration specifiers or '...' before '(' token	lv_area.h	/stm32f746_disco_no_os/lvgl/src/lv_misc	line 29	C/C++ Problem
+expected declaration specifiers or '...' before '(' token	lv_area.h	/stm32f746_disco_no_os/lvgl/src/lv_misc	line 30	C/C++ Problem
+expected declaration specifiers or '...' before '(' token	lv_chart.h	/stm32f746_disco_no_os/lvgl/src/lv_objx	line 32	C/C++ Problem
+expected declaration specifiers or '...' before '(' token	lv_draw_label.h	/stm32f746_disco_no_os/lvgl/src/lv_draw	line 22	C/C++ Problem
+expected declaration specifiers or '...' before '(' token	lv_style.h	/stm32f746_disco_no_os/lvgl/src/lv_core	line 25	C/C++ Problem
+expected declaration specifiers or '...' before '(' token	lv_ta.h	/stm32f746_disco_no_os/lvgl/src/lv_objx	line 40	C/C++ Problem
+expected declaration specifiers or '...' before numeric constant	lv_bar.h	/stm32f746_disco_no_os/lvgl/src/lv_objx	line 35	C/C++ Problem
+expected declaration specifiers or '...' before numeric constant	lv_bar.h	/stm32f746_disco_no_os/lvgl/src/lv_objx	line 38	C/C++ Problem
+expected declaration specifiers or '...' before numeric constant	lv_bar.h	/stm32f746_disco_no_os/lvgl/src/lv_objx	line 44	C/C++ Problem
+expected declaration specifiers or '...' before numeric constant	lv_btnm.h	/stm32f746_disco_no_os/lvgl/src/lv_objx	line 32	C/C++ Problem
+expected declaration specifiers or '...' before numeric constant	lv_chart.h	/stm32f746_disco_no_os/lvgl/src/lv_objx	line 35	C/C++ Problem
+expected declaration specifiers or '...' before numeric constant	lv_label.h	/stm32f746_disco_no_os/lvgl/src/lv_objx	line 34	C/C++ Problem
+expected declaration specifiers or '...' before numeric constant	lv_label.h	/stm32f746_disco_no_os/lvgl/src/lv_objx	line 35	C/C++ Problem
+expected declaration specifiers or '...' before numeric constant	lv_log.h	/stm32f746_disco_no_os/lvgl/src/lv_misc	line 29	C/C++ Problem
+expected declaration specifiers or '...' before numeric constant	lv_log.h	/stm32f746_disco_no_os/lvgl/src/lv_misc	line 30	C/C++ Problem
+expected declaration specifiers or '...' before numeric constant	lv_log.h	/stm32f746_disco_no_os/lvgl/src/lv_misc	line 31	C/C++ Problem
+expected declaration specifiers or '...' before numeric constant	lv_log.h	/stm32f746_disco_no_os/lvgl/src/lv_misc	line 32	C/C++ Problem
+expected declaration specifiers or '...' before numeric constant	lv_log.h	/stm32f746_disco_no_os/lvgl/src/lv_misc	line 33	C/C++ Problem
+make: *** [tosbaga/subdir.mk:18: tosbaga/anolog_Clock.o] Error 1	stm32f746_disco_no_os		 	C/C++ Problem
