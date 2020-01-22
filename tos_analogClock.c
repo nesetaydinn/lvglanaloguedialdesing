@@ -30,12 +30,13 @@
 
 
 /*Fonksiyonlar*/
-static lv_res_t tos_analogClock_signal(lv_obj_t * analogclock, lv_signal_t sign, void * param);
 static void tos_analogClock_static(lv_obj_t * analogclock, const lv_area_t * mask, lv_design_mode_t mode);
 static void tos_analogClock_dynamic(lv_obj_t * analogclock, const lv_area_t * mask, lv_design_mode_t mode);
 static bool tos_analogClock_design(lv_obj_t * analogclock, const lv_area_t * mask, lv_design_mode_t mode);
 
 /*Sabitler*/
+
+
 const int analogClock_x = 136;
 const int analogClock_y = 136;
 /*Tanimlamalar*/
@@ -43,6 +44,8 @@ static lv_signal_cb_t ancestor_signal;
 lv_point_t p1;
 lv_point_t p2;
 lv_opa_t opa_scale;
+lv_coord_t x_ofs;
+lv_coord_t y_ofs;
 tos_analogClock_ext_t * ext;
 /*Stil Tanimlamalari*/
 static lv_style_t clockStaticStyle1;
@@ -74,7 +77,6 @@ lv_obj_t * tos_analogClock_create(lv_obj_t * par, const lv_obj_t * copy)
 
 
 	/*Sinyal ve tasarim islemleri kopyalanmaz onlari burada ayarlayin*/
-	lv_obj_set_signal_cb(new_analogClock, tos_analogClock_signal);
 	lv_obj_set_design_cb(new_analogClock, tos_analogClock_design);
 
 
@@ -135,6 +137,9 @@ static void tos_analogClock_static(lv_obj_t * analogclock, const lv_area_t * mas
 	clockStaticStyle2.line.color = LV_COLOR_GRAY;
 	clockStaticStyle2.line.rounded = 0;
 
+	x_ofs = lv_obj_get_width(analogclock) / 2 + analogclock->coords.x1;
+	y_ofs = lv_obj_get_height(analogclock) / 2 + analogclock->coords.y1;
+
 	const int margin = 5;
 	const int lineWidht = 10; //Çizgi uzunluğu
 	const int innermargin = 15; //kadranlar arası boşluk
@@ -148,10 +153,10 @@ static void tos_analogClock_static(lv_obj_t * analogclock, const lv_area_t * mas
 		float cosin = cos(theta);
 		float sinus = sin(theta);
 
-		p1.x = (analogClock_x + (radiusHours * cosin));
-		p1.y = (analogClock_y + (radiusHours * sinus));
-		p2.x = (analogClock_x + ((radiusHours - lineWidht) * cosin));
-		p2.y = (analogClock_y + ((radiusHours - lineWidht) * sinus));
+		p1.x = (x_ofs + (radiusHours * cosin));
+		p1.y = (y_ofs + (radiusHours * sinus));
+		p2.x = (x_ofs + ((radiusHours - lineWidht) * cosin));
+		p2.y = (y_ofs + ((radiusHours - lineWidht) * sinus));
 		sayac++;
 
 		if (1 == sayac % 3) {
@@ -171,10 +176,10 @@ static void tos_analogClock_static(lv_obj_t * analogclock, const lv_area_t * mas
 		float cosin = cos(theta);
 		float sinus = sin(theta);
 
-		p1.x = (analogClock_x + radiusMinutes * cosin);
-		p1.y = (analogClock_y + radiusMinutes * sinus);
-		p2.x = (analogClock_x + (radiusMinutes - lineWidht) * cosin);
-		p2.y = (analogClock_y + (radiusMinutes - lineWidht) * sinus);
+		p1.x = (x_ofs + radiusMinutes * cosin);
+		p1.y = (y_ofs + radiusMinutes * sinus);
+		p2.x = (x_ofs + (radiusMinutes - lineWidht) * cosin);
+		p2.y = (y_ofs + (radiusMinutes - lineWidht) * sinus);
 		sayac++;
 
 
@@ -186,10 +191,10 @@ static void tos_analogClock_static(lv_obj_t * analogclock, const lv_area_t * mas
 		float cosin = cos(theta);
 		float sinus = sin(theta);
 
-		p1.x = (analogClock_x + radiusSecond * cosin);
-		p1.y = (analogClock_y + radiusSecond * sinus);
-		p2.x = (analogClock_x + (radiusSecond - lineWidht) * cosin);
-		p2.y = (analogClock_y + (radiusSecond - lineWidht) * sinus);
+		p1.x = (x_ofs + radiusSecond * cosin);
+		p1.y = (y_ofs + radiusSecond * sinus);
+		p2.x = (x_ofs + (radiusSecond - lineWidht) * cosin);
+		p2.y = (y_ofs + (radiusSecond - lineWidht) * sinus);
 		sayac++;
 
 
@@ -202,9 +207,13 @@ static void tos_analogClock_static(lv_obj_t * analogclock, const lv_area_t * mas
 static void tos_analogClock_dynamic(lv_obj_t * analogclock, const lv_area_t * mask, lv_design_mode_t mode) {
 	ext = lv_obj_get_ext_attr(analogclock);
 	opa_scale = lv_obj_get_opa_scale(analogclock);
-	double secondsRadian = tos_analogClock_mapValue(tos_saniye, 0, 60, 0, PI * 2) - (PI / 2);
-	double minutesRadian = tos_analogClock_mapValue(tos_dakika + tos_analogClock_normalize(tos_saniye, 0, 60) - 1, 0, 60, 0, PI * 2) - (PI / 2);
 	double hoursRadian = tos_analogClock_mapValue(tos_saat + tos_analogClock_normalize(tos_dakika + tos_analogClock_normalize(tos_saniye, 0, 60), 0, 60), 0, 12, 0, PI * 2) - (PI / 2);
+	double minutesRadian = tos_analogClock_mapValue(tos_dakika + tos_analogClock_normalize(tos_saniye, 0, 60) - 1, 0, 60, 0, PI * 2) - (PI / 2);
+	double secondsRadian = tos_analogClock_mapValue(tos_saniye, 0, 60, 0, PI * 2) - (PI / 2);
+
+
+	x_ofs = lv_obj_get_width(analogclock) / 2 + analogclock->coords.x1;
+	y_ofs = lv_obj_get_height(analogclock) / 2 + analogclock->coords.y1;
 
 	lv_style_copy(&tos_saatstil, &lv_style_plain);
 	tos_saatstil.line.width = 5;
@@ -230,65 +239,48 @@ static void tos_analogClock_dynamic(lv_obj_t * analogclock, const lv_area_t * ma
 	const int radiusMinutes = radiusHours - lineWidht - innermargin;
 	const int radiusSecond = radiusMinutes - lineWidht - innermargin;
 
-	//Seconds
-	int sayac = 0;
-	float theta = 0;
-	float oneRad = TWO_PI / 60;
-	float maxRad = (float)secondsRadian + (PI / 2);
-	while (theta < maxRad) {
-		sayac += 1;
-		theta += oneRad;
-		float cosin = cos(theta - (PI / 2) - (PI / 30));
-		float sinus = sin(theta - (PI / 2) - (PI / 30));
-
-		p1.x = analogClock_x + (radiusSecond * cosin);
-		p1.y = analogClock_y + (radiusSecond * sinus);
-		p2.x = analogClock_x + ((radiusSecond - lineWidht) * cosin);
-		p2.y = analogClock_y + ((radiusSecond - lineWidht) * sinus);
-
-		lv_draw_line(&p1, &p2, mask, &tos_saniyestil, opa_scale);
-
-
-	}
-
-	//Minutes
-	sayac = 0;
-	oneRad = TWO_PI / 60;
-	theta = oneRad;
-	maxRad = (float)minutesRadian + (PI / 2);
-	while (theta < maxRad + oneRad) {
-		sayac += 1;
-		theta += oneRad;
-		float cosin = cos(theta - (PI / 2) - (PI / 30));
-		float sinus = sin(theta - (PI / 2) - (PI / 30));
-
-		p1.x = analogClock_x + (radiusMinutes * cosin);
-		p1.y = analogClock_y + (radiusMinutes * sinus);
-		p2.x = analogClock_x + ((radiusMinutes - lineWidht) * cosin);
-		p2.y = analogClock_y + ((radiusMinutes - lineWidht) * sinus);
-
-
-		lv_draw_line(&p1, &p2, mask, &tos_dakikastil, opa_scale);
-	}
-
-
+	
+	
 	// Hours
-	sayac = 0;
-	oneRad = TWO_PI / 12;
-	theta = 0;
-	maxRad = (float)hoursRadian + (float)(PI / 3);
-	while (theta < maxRad) {
-		sayac += 1;
-		theta += oneRad;
+	float hours_maxRad = (float)hoursRadian + (float)(PI / 3);
+
+	for (float theta = 0; theta < hours_maxRad; theta += TWO_PI / 12) {
 		float cosin = cos(theta - (PI / 2));
 		float sinus = sin(theta - (PI / 2));
 
-		p1.x = analogClock_x + (radiusHours * cosin);
-		p1.y = analogClock_y + (radiusHours * sinus);
-		p2.x = analogClock_x + ((radiusHours - lineWidht) * cosin);
-		p2.y = analogClock_y + ((radiusHours - lineWidht) * sinus);
-
+		p1.x = x_ofs + (radiusHours * cosin);
+		p1.y = y_ofs + (radiusHours * sinus);
+		p2.x = x_ofs + ((radiusHours - lineWidht) * cosin);
+		p2.y = y_ofs + ((radiusHours - lineWidht) * sinus);
 		lv_draw_line(&p1, &p2, mask, &tos_saatstil, opa_scale);
+	}
+
+	//Minutes
+	float minutes_maxRad = (float)minutesRadian + (float)(PI / 2);
+
+	for (float theta = 0; theta < minutes_maxRad; theta += TWO_PI / 60) {
+		float cosin = cos(theta - (PI / 2) - (PI / 30));
+		float sinus = sin(theta - (PI / 2) - (PI / 30));
+
+		p1.x = x_ofs + (radiusMinutes * cosin);
+		p1.y = y_ofs + (radiusMinutes * sinus);
+		p2.x = x_ofs + ((radiusMinutes - lineWidht) * cosin);
+		p2.y = y_ofs + ((radiusMinutes - lineWidht) * sinus);
+		lv_draw_line(&p1, &p2, mask, &tos_dakikastil, opa_scale);
+	}
+
+	//Seconds
+	float seconds_maxRad = (float)secondsRadian + (float)(PI / 2);
+
+	for (float theta = 0; theta < seconds_maxRad; theta += TWO_PI / 60) {
+		float cosin = cos(theta - (PI / 2) - (PI / 30));
+		float sinus = sin(theta - (PI / 2) - (PI / 30));
+
+		p1.x = x_ofs + (radiusSecond * cosin);
+		p1.y = y_ofs + (radiusSecond * sinus);
+		p2.x = x_ofs + ((radiusSecond - lineWidht) * cosin);
+		p2.y = y_ofs + ((radiusSecond - lineWidht) * sinus);
+		lv_draw_line(&p1, &p2, mask, &tos_saniyestil, opa_scale);
 	}
 
 }
@@ -302,48 +294,10 @@ static bool tos_analogClock_design(lv_obj_t * analogclock, const lv_area_t * mas
 	}
 	/*Draw the object*/
 	else if (mode == LV_DESIGN_DRAW_MAIN) {
-		 ext = lv_obj_get_ext_attr(analogclock);
-		 opa_scale = lv_obj_get_opa_scale(analogclock);
-
 		 tos_analogClock_static(analogclock, mask, mode); /*Statik cizim fonksiyonu*/
 		 tos_analogClock_dynamic(analogclock, mask, mode); /*Dinamik cizim fonksiyonu*/
-
-
 	}
-	/*Post draw when the children are drawn*/
-	else if (mode == LV_DESIGN_DRAW_POST) {
-	}
-
 	return true;
 }
-/*Sinyal Fonksiyonu*/
-static lv_res_t tos_analogClock_signal(lv_obj_t * analogclock, lv_signal_t sign, void * param)
-{
-    lv_res_t res;
-
-    /* Include the ancient signal function */
-    res = ancestor_signal(analogclock, sign, param);
-    if(res != LV_RES_OK) return res;
-
-    if(sign == LV_SIGNAL_CLEANUP) {
-        /*Nothing to cleanup. (No dynamically allocated memory in 'ext')*/
-    } else if(sign == LV_SIGNAL_STYLE_CHG) {
-        lv_obj_refresh_ext_draw_pad(analogclock);
-    } else if(sign == LV_SIGNAL_REFR_EXT_DRAW_PAD) {
-        const lv_style_t * style = tos_analogClock_get_style(analogclock, TOS_ANALOGCLOCK_STYLE_MAIN);
-        analogclock->ext_draw_pad     = LV_MATH_MAX(analogclock->ext_draw_pad, style->line.width);
-    } else if(sign == LV_SIGNAL_GET_TYPE) {
-        lv_obj_type_t * buf = param;
-        uint8_t i;
-        for(i = 0; i < LV_MAX_ANCESTOR_NUM - 1; i++) { /*Find the last set data*/
-            if(buf->type[i] == NULL) break;
-        }
-        buf->type[i] = "tos_analogclock";
-    }
-
-    return res;
-}
-
-
 
 #endif
